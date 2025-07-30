@@ -1,14 +1,9 @@
 {
   "name": "gdsopen-website",
-  "compatibility_date": "2025-07-31",
+  "compatibility_date": "2025-07-30",
   "main": "functions/[[catchall]].ts",
   "site": {
     "bucket": "./dist"
-  },
-  "env": {
-    "preview": {
-      "name": "gdsopen-website-preview"
-    }
   },
   "routes": [
     {
