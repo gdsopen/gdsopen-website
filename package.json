@@ -1,0 +1,46 @@
+{
+  "name": "gdsopen-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "start": "vite --port 3000",
+    "build": "vite build && tsc",
+    "build:workers": "vite build",
+    "deploy": "wrangler deploy",
+    "serve": "vite preview",
+    "test": "vitest run",
+    "lint": "biome check --write .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "fix": "biome check --write .",
+    "prepare": "run-p prepare:*",
+    "prepare:fonts": "bash scripts/download-fonts.sh",
+    "prepare:panda": "panda codegen"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "^1.130.8",
+    "@tanstack/react-router-devtools": "^1.130.8",
+    "@tanstack/router-plugin": "^1.130.8",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.3",
+    "@cloudflare/vite-plugin": "^1.10.2",
+    "@pandacss/dev": "^0.54.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "clsx": "^2.1.1",
+    "jsdom": "^26.1.0",
+    "npm-run-all2": "^8.0.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4",
+    "web-vitals": "^4.2.4",
+    "wrangler": "^4.26.1"
+  }
+}

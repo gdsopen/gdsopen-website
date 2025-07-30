@@ -1,0 +1,5 @@
+@layer reset, base, tokens, recipes, utilities;
+
+:root {
+  --global-font-body: "Open Sans", "Noto Sans JP", sans-serif;
+}

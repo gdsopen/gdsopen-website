@@ -1,0 +1,74 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Workers
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Lint and Format Check
+        run: pnpm run check
+        
+      - name: Build
+        run: pnpm run build:workers
+        
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+  release:
+    runs-on: ubuntu-latest
+    name: Create Release
+    needs: deploy
+    outputs:
+      release_tag: ${{ steps.release_tag.outputs.VERSION }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate release tag
+        id: release_tag
+        run: |
+          VERSION=$(date +'%Y.%m.%d.%H%M')
+          echo "VERSION=v$VERSION" >> $GITHUB_OUTPUT
+        env:
+          TZ: "Asia/Tokyo"
+
+      - name: Create Release
+        run: |
+          gh release create ${{ steps.release_tag.outputs.VERSION }} \
+            --title "Release ${{ steps.release_tag.outputs.VERSION }}" \
+            --generate-notes \
+            --prerelease=false \
+            --target main \
+            --latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
